@@ -1,0 +1,42 @@
+name: I spy
+variables:
+-
+  name: bigger-than-a-breadbox
+  properties:
+    - Generic content that fits inside the variable or node
+    - Yet more content, properties are typically an array
+    - For the simplest of variables, we can just do an inline hash, like below.
+- name: this-side-of-the-room
+- name: bigger-than-an-apple
+- name: useful-on-a-deserted-island
+- name: something-i-would-use
+- name: alarm-clock
+- name: laptop
+- name: hair-dryer
+- name: pocket-knife
+
+edges:
+-
+  parent: bigger-than-a-breadbox
+  child: bigger-than-an-apple
+
+-
+  parent: bigger-than-a-breadbox
+  child: this-side-of-the-room
+-
+  parent: bigger-than-a-breadbox
+  child: bigger-than-an-apple
+
+definitions:
+-
+  for: y
+  given:
+    - e1
+    - e2
+  table:
+    - 
+      - 0.9
+      - 0.1
+    - 
+      - 0.1
+      - 0.9

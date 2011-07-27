@@ -12,7 +12,10 @@ module Fathom
     # = Attributes =
     # ==============
     attribute :name
-    attribute :nodes
+    attribute :variables
+    attribute :properties
+    attribute :edges
+    attribute :definitions
     
     def initialize(attrs={})
       @attributes = attrs
@@ -22,8 +25,8 @@ module Fathom
     # = Instance Methods =
     # ====================
     def each(&block)
-      nodes.each do |node|
-        yield node
+      variables.each do |variable|
+        yield variable
       end
     end
     

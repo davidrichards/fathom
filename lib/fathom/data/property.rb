@@ -1,5 +1,14 @@
 module Fathom
-  class Variable
+  class Property
+    
+    # =================
+    # = Class Methods =
+    # =================
+    class << self
+      def infer(obj)
+        new(:value => obj)
+      end
+    end
     
     # ============
     # = Behavior =
@@ -10,14 +19,13 @@ module Fathom
     # ==============
     # = Attributes =
     # ==============
-    attribute :name
-    attribute :properties
-    attribute :outcomes, [true, false]
+    attribute :value
     
     def initialize(attrs={})
       @attributes = attrs
     end
     
-  end # class Data
-  
-end
+  end # Property
+end # Fathom
+    
+    

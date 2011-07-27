@@ -1,5 +1,5 @@
 module Fathom
-  class Variable
+  class Definition
     
     # ============
     # = Behavior =
@@ -10,14 +10,13 @@ module Fathom
     # ==============
     # = Attributes =
     # ==============
-    attribute :name
-    attribute :properties
-    attribute :outcomes, [true, false]
+    attribute :for
+    attribute :given
+    attribute :table
     
     def initialize(attrs={})
       @attributes = attrs
     end
     
-  end # class Data
-  
-end
+  end # Definition
+end # Fathom

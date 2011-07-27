@@ -8,13 +8,21 @@ describe Variable do
     v.attributes.should eql(some: :value)
   end
   
-  it "should initialize with a name" do
-    v = Variable.new(:name => :a)
-    v.name.should eql(:a)
+  it "should initialize a name accessor" do
+    Variable.should have_an_initialization_accessor_for(:name)
   end
   
-  it "should initialize with a description" do
-    v = Variable.new(:description => :description)
-    v.description.should eql(:description)
+  it "should initialize a properties accessor" do
+    Variable.should have_an_initialization_accessor_for(:properties)
   end
+  
+  it "should initialize a outcomes accessor" do
+    Variable.should have_an_initialization_accessor_for(:outcomes)
+  end
+  
+  it "should default the outcomes to [true, false]" do
+    v = Variable.new
+    v.outcomes.should eql([true, false])
+  end
+
 end

@@ -29,15 +29,29 @@ def path(path)
 end
 
 # =============
-# = Utilities =
+# = Behaviors =
 # =============
-Fathom.autoload :AttributeSystem, path('utilities/attribute_system')
-Fathom.autoload :Plugins, path('utilities/plugins')
+Fathom.autoload :AttributeSystem, path('behaviors/attribute_system')
+Fathom.autoload :ContextBehavior, path('behaviors/context_behavior')
+Fathom.autoload :Plugins, path('behaviors/plugins')
 
 # ===============
 # = Data Models =
 # ===============
+Fathom.autoload :Definition, path('data/definition')
 Fathom.autoload :Edge, path('data/edge')
 Fathom.autoload :Network, path('data/network')
+Fathom.autoload :Outcome, path('data/outcome')
+Fathom.autoload :Property, path('data/property')
 Fathom.autoload :Variable, path('data/variable')
 
+# ============
+# = Contexts =
+# ============
+Fathom.autoload :NetworkPopulation, path('contexts/network_population')
+Fathom.autoload :NetworkTraversal, path('contexts/network_traversal')
+
+# =========
+# = Roles =
+# =========
+Fathom.autoload :NetworkBuilder, path('roles/network_builder')
