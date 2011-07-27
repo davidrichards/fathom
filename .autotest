@@ -1,0 +1,12 @@
+begin
+  require 'autotest/fsevent'
+  require 'autotest/growl'
+rescue
+  # Don't complain if this OS X-specific functionality isn't available.
+end
+
+Autotest.add_hook :initialize do |autotest|
+  %w{.git .svn .hg .DS_Store ._* vendor tmp log}.each do |exception|
+    autotest.add_exception(exception)
+  end
+end
