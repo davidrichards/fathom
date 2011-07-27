@@ -24,3 +24,4 @@ describe Network do
     n.map.to_a.should eql([1,2,3])
   end
 end
+
