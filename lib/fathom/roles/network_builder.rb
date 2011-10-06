@@ -48,7 +48,9 @@ module Fathom
       # Uses the Class.infer, if available.  Otherwise initializes the value passed in.
       def infer_serialized_array(array, klass)
         array.map do |e|
-          if klass.respond_to?(:infer)
+          if  klass == e.class
+            e
+          elsif klass.respond_to?(:infer)
             klass.infer(e)
           else
             klass.new(e)

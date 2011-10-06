@@ -21,6 +21,10 @@ describe Fathom do
       Fathom.config.storage.should eql(:another_storage_option)
     end
     
+    it "should use the String extensions" do
+      "test".should respond_to(:underscore)
+    end
+    
   end
   
   

@@ -1,3 +1,8 @@
+# ================
+# = Dependencies =
+# ================
+Dir.glob("#{File.dirname(__FILE__)}/ext/*.rb").each { |file| require file}
+
 module Fathom
   
   class Config

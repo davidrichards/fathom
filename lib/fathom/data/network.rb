@@ -12,10 +12,10 @@ module Fathom
     # = Attributes =
     # ==============
     attribute :name
-    attribute :variables
-    attribute :properties
-    attribute :edges
-    attribute :definitions
+    attribute :variables, []
+    attribute :properties, []
+    attribute :edges, []
+    attribute :definitions, []
     
     def initialize(attrs={})
       @attributes = attrs

@@ -12,6 +12,10 @@ describe Network do
     Network.should have_an_initialization_accessor_for(:variables)
   end
   
+  it "should default the variables to an array" do
+    Network.new.variables.should eql([])
+  end
+  
   it "should extend Enumerable" do
     Network.ancestors.should be_include(Enumerable)
   end
@@ -24,13 +28,25 @@ describe Network do
   it "should initialize a properties accessor" do
     Network.should have_an_initialization_accessor_for(:properties)
   end
+  
+  it "should default the properties to an Array" do
+    Network.new.properties.should eql([])
+  end
 
-  it "should initialize a edges accessor" do
+  it "should initialize an edges accessor" do
     Network.should have_an_initialization_accessor_for(:edges)
+  end
+  
+  it "should default the edges to an Array" do
+    Network.new.edges.should eql([])
   end
   
   it "should initialize a definitions accessor" do
     Network.should have_an_initialization_accessor_for(:definitions)
+  end
+  
+  it "should default the definitions to an Array" do
+    Network.new.definitions.should eql([])
   end
   
 end
