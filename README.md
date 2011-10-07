@@ -10,7 +10,7 @@ Welcome to Fathom.  Fathom is a library for building decision support tools.  Fa
 Stability Note
 ==============
 
-I've recently refactored this library.  That makes the core Fathom quite stable, but much less useful.  
+I've recently refactored this library.  That makes the core Fathom quite stable, but much less useful.  The specific functionality (various databases, say, GSL support, various graphical model algorithms) will be in yet-to-be-released gems.  I'm going to stabilize these before releasing them to the public.
 
 Inspiration for the Project
 ---------------------------
