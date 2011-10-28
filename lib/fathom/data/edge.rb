@@ -1,6 +1,22 @@
 module Fathom
   class Edge
     
+    # =============
+    # Class Methods
+    # =============
+    class << self
+      def infer(obj)
+        case obj
+        when Edge
+          obj
+        when Array
+          new(:parent => infer(obj[0]), :child => infer(obj[1]))
+        when Hash
+          new(obj)
+        end
+      end
+    end
+    
     # ============
     # = Behavior =
     # ============
