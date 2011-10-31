@@ -12,6 +12,31 @@ Stability Note
 
 I've recently refactored this library.  That makes the core Fathom quite stable, but much less useful.  The specific functionality (various databases, say, GSL support, various graphical model algorithms) will be in yet-to-be-released gems.  I'm going to stabilize these before releasing them to the public.
 
+The gems I am actively working on are:
+
+* fm-belief-network: a general gem for Bayesian inference
+* fm-amalgalite-beliefs: a specific gem for Bayesian networks using SQLite3 and [Amalgalite](https://github.com/copiousfreetime/amalgalite)
+* fm-goliath: A simple web service API using the wonderful network of gems associated with [Goliath](https://github.com/postrank-labs/goliath)
+
+There are at least another dozen fm-* gems that live in some level of development.  These are gems like fm-redis-beliefs, fm-clinical-decision-support, and fm-apophenia.  I'll release these slowly and carefully as they go into production on real systems.  That helps keep me from getting ahead of myself.  If you're starting to see the power of how these tools can be used for your work, drop me a note and I could see if I can get your kind of analysis out in the Fathom set of gems.
+
+Architecture
+============
+
+I've worked on this system for several years, rewriting it every once in a while.  It has taught me more about analysis and software architecture than any other endeavor of my life.  I've come to appreciate a few things in my work:
+
+* Testing: I have thrown away a lot of hastily-written work that I could not come back and test properly.  It's hard enough to have solid software with solid tests, it's insane to work on this kind of software without testing.
+* Modularity: I'm learning a style of development that loosely follows [DCI](http://en.wikipedia.org/wiki/Data,_Context_and_Interaction) philosophies.  I don't know if I've mastered these ideas, but it is a lot easier for me to have thin data models, contexts that support business goals, and interactions that can be well-monitored.
+* Incremental Enhancement: It's nice when an idea can be expressed simply.  If I need to get more complicated, I can mix in more specific code, or require another gem.  In this way, I have Fathom that knows a little about graph algorithms, but fm-belief-networks that knows more about prior and posterior probabilities, conditional probability tables, and the workings of a Bayesian network.  I further enhance these ideas in fm-amalgalite-beliefs with specific implementations of this data, stored in SQLite tables for the flexibility and speed of set operations in this embedded system.  fm-redis-beliefs won't have the benefit of SQL for a query language, but will have the benefit of a federated key-value store for larger networks.
+
+I probably could/should write a book someday about what I'm learning about architecture.  What this means for the practicing analyst is that we should have a fairly easy way of building models with tools that are appropriate to your problem.  There should be little coupling, and lot of graceful experimentation between various tools that are being produced.  
+
+If you'd like to contribute, you're welcome to do lots of things:
+
+* fork a Fathom branch, write code with tests, and submit a merge request.
+* write another fm-* gem that adds these tools with other tools you use.
+* drop me a line and setup a pair programming session.  We can build some tools together and get you on your way quickly.
+
 Inspiration for the Project
 ---------------------------
 

@@ -17,8 +17,8 @@ Jeweler::Tasks.new do |gem|
   gem.name = "fathom"
   gem.homepage = "http://github.com/davidrichards/fathom"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{Decision support in Ruby}
+  gem.description = %Q{A framework for building analytical models in Ruby and supporting systems.  This is meant to be a flexible tool for many kinds of models, and should grow gently over time.}
   gem.email = "davidlamontrichards@gmail.com"
   gem.authors = ["David Richards"]
   # dependencies defined in Gemfile
