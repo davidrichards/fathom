@@ -20,6 +20,25 @@ The gems I am actively working on are:
 
 There are at least another dozen fm-* gems that live in some level of development.  These are gems like fm-redis-beliefs, fm-clinical-decision-support, and fm-apophenia.  I'll release these slowly and carefully as they go into production on real systems.  That helps keep me from getting ahead of myself.  If you're starting to see the power of how these tools can be used for your work, drop me a note and I could see if I can get your kind of analysis out in the Fathom set of gems.
 
+Inspiration for the Project
+===========================
+
+The ideas for this gem are coming from a lot of places:
+
+* Judea Pearl's work on causal graphs and belief networks.  See [Causality](http://www.amazon.com/Causality-Reasoning-Inference-Judea-Pearl/dp/052189560X/ref=sr_1_1?s=books&ie=UTF8&qid=1288840948&sr=1-1) and [Probabilistic Reasoning in Intelligent Systems](http://www.amazon.com/Probabilistic-Reasoning-Intelligent-Systems-Plausible/dp/1558604790/ref=ntt_at_ep_dpi_2)
+* Douglas Hubbard's ideas on decision support.  See [How to Measure Anything](http://www.amazon.com/How-Measure-Anything-Intangibles-Business/dp/0470539399/ref=sr_1_1?ie=UTF8&qid=1288840870&sr=8-1)
+* Ben Klemens' ideas on data analysis.  See [Modeling with Data](http://modelingwithdata.org/about_the_book.html)
+* Daphne Koller and Nir Friedman's ideas on [Probabilistic Graphical Models](http://mitpress.mit.edu/catalog/item/default.asp?ttype=2&tid=11886)
+
+Goals
+=====
+
+The goals of this project are:
+
+* Build a decoupled library with Ruby and the GSL (currently optional)
+* Make it easy to gather information of all types
+* Add tools to analyze the integration of knowledge
+
 Architecture
 ============
 
@@ -31,27 +50,14 @@ I've worked on this system for several years, rewriting it every once in a while
 
 I probably could/should write a book someday about what I'm learning about architecture.  What this means for the practicing analyst is that we should have a fairly easy way of building models with tools that are appropriate to your problem.  There should be little coupling, and lot of graceful experimentation between various tools that are being produced.  
 
+Contributing
+============
+
 If you'd like to contribute, you're welcome to do lots of things:
 
 * fork a Fathom branch, write code with tests, and submit a merge request.
 * write another fm-* gem that adds these tools with other tools you use.
 * drop me a line and setup a pair programming session.  We can build some tools together and get you on your way quickly.
-
-Inspiration for the Project
----------------------------
-
-The ideas for this gem are coming from a lot of places:
-
-* Judea Pearl's work on causal graphs and belief networks.  See [Causality](http://www.amazon.com/Causality-Reasoning-Inference-Judea-Pearl/dp/052189560X/ref=sr_1_1?s=books&ie=UTF8&qid=1288840948&sr=1-1) and [Probabilistic Reasoning in Intelligent Systems](http://www.amazon.com/Probabilistic-Reasoning-Intelligent-Systems-Plausible/dp/1558604790/ref=ntt_at_ep_dpi_2)
-* Douglas Hubbard's ideas on decision support.  See [How to Measure Anything](http://www.amazon.com/How-Measure-Anything-Intangibles-Business/dp/0470539399/ref=sr_1_1?ie=UTF8&qid=1288840870&sr=8-1)
-* Ben Klemens' ideas on data analysis.  See [Modeling with Data](http://modelingwithdata.org/about_the_book.html)
-* Daphne Koller and Nir Friedman's ideas on [Probabilistic Graphical Models](http://mitpress.mit.edu/catalog/item/default.asp?ttype=2&tid=11886)
-
-The goals of this project are:
-
-* Build a decoupled library with Ruby and the GSL (currently optional)
-* Make it easy to gather information of all types
-* Add tools to analyze the integration of knowledge
 
 Copyright
 ---------
