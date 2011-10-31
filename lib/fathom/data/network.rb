@@ -29,6 +29,7 @@ module Fathom
         yield variable
       end
     end
+    alias :each_variable :each
     
   end
 end

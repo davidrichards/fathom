@@ -3,6 +3,8 @@
 # ================
 Dir.glob("#{File.dirname(__FILE__)}/ext/*.rb").each { |file| require file}
 
+require 'uuid'
+
 module Fathom
   
   class Config
@@ -43,6 +45,7 @@ Fathom.autoload :Plugins, path('behaviors/plugins')
 # ===============
 # = Data Models =
 # ===============
+Fathom.autoload :AdjacencyMatrix, path('data/adjacency_matrix')
 Fathom.autoload :Definition, path('data/definition')
 Fathom.autoload :Edge, path('data/edge')
 Fathom.autoload :Network, path('data/network')
@@ -60,3 +63,4 @@ Fathom.autoload :NetworkTraversal, path('contexts/network_traversal')
 # = Roles =
 # =========
 Fathom.autoload :NetworkBuilder, path('roles/network_builder')
+Fathom.autoload :GeneralGraphTools, path('roles/general_graph_tools')

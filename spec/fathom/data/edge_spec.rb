@@ -40,4 +40,38 @@ describe Edge do
     edge.parent.should ==(Variable.new(:name => :v1))
     edge.child.should ==(Variable.new(:name => :v2))
   end
+  
+  context "when inferring an Edge" do
+    it "should be able to infer an Edge from an Edge" do
+      edge = Edge.new :parent => :v1, :child => :v2
+      inferred = Edge.infer(edge)
+      inferred.should eql(edge)
+    end
+    
+    it "should be able to infer an Edge from an Array, [parent, child]" do
+      v1 = Variable.infer(:v1)
+      v2 = Variable.infer(:v2)
+      edge = Edge.infer([v1, v2])
+      edge.should be_a(Edge)
+      edge.parent.should eql(v1)
+      edge.child.should eql(v2)
+    end
+    
+    it "should be able to take more than one parameter and use that as a parent, child indicator" do
+      v1 = Variable.infer(:v1)
+      v2 = Variable.infer(:v2)
+      edge = Edge.infer(v1, v2)
+      edge.should be_a(Edge)
+      edge.parent.should eql(v1)
+      edge.child.should eql(v2)
+    end
+    
+    it "should be able to infer an Edge from a Hash" do
+      edge = Edge.infer :parent => :p, :child => :c
+      edge.parent.should be_a(Variable)
+      edge.parent.name.should eql(:p)
+      edge.child.should be_a(Variable)
+      edge.child.name.should eql(:c)
+    end
+  end
 end

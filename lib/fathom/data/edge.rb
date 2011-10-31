@@ -5,12 +5,14 @@ module Fathom
     # Class Methods
     # =============
     class << self
-      def infer(obj)
+      def infer(obj, optional_child=nil)
+        return new(:parent => Variable.infer(obj), :child => Variable.infer(optional_child)) if optional_child
+        
         case obj
         when Edge
           obj
         when Array
-          new(:parent => infer(obj[0]), :child => infer(obj[1]))
+          new(:parent => Variable.infer(obj[0]), :child => Variable.infer(obj[1]))
         when Hash
           new(obj)
         end

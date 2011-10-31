@@ -9,6 +9,7 @@ describe Variable do
   # ==================
   it "should have an attributes getter, built from initialization" do
     v = Variable.new(some: :value)
+    v.attributes.delete(:id)
     v.attributes.should eql({:some => :value, :prior_odds => [0.5, 0.5]})
   end
   
@@ -81,6 +82,20 @@ describe Variable do
       Variable.infer(@string).should ==(@v1)
     end
 
+  end
+  
+  # ======
+  # = ID =
+  # ======
+  context "when ensuring a unique id" do
+    before do
+      @v = Variable.new
+    end
+    
+    it "should have an id, a UUID" do
+      uuid_re = /^\w{8}\-\w{4}\-\w{4}\-\w{4}\-\w{12}$/
+      @v.id.should match(uuid_re)
+    end
   end
 
 end

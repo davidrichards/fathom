@@ -49,5 +49,24 @@ describe Network do
     Network.new.definitions.should eql([])
   end
   
+  context "when using the Enumerator" do
+    before do
+      @n = Network.new :variables => [1,2,3]
+      @variables = @n.variables 
+    end
+    
+    it "should be able to iterate on the variables" do
+      @n.each {|v| @variables.should be_include(v)}
+    end
+  
+    it "should have each_variable as an alias to each" do
+      @n.each_variable {|v| @variables.should be_include(v)}
+    end
+  
+    it "should use the variable enumeration for the Enumerable" do
+      @n.map {|v| v }.should eql([1,2,3])
+    end
+  end
+  
 end
 

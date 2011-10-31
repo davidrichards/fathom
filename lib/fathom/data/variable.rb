@@ -26,12 +26,14 @@ module Fathom
     # ==============
     # = Attributes =
     # ==============
+    attribute :id
     attribute :name
     attribute :properties
     attribute :outcomes, [true, false]
     attribute :prior_odds
     
     def initialize(attrs={})
+      attrs[:id] ||= UUID.generate
       @attributes = attrs
       self.prior_odds ||= uniform_set.dup
     end

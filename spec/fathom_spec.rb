@@ -25,6 +25,10 @@ describe Fathom do
       "test".should respond_to(:underscore)
     end
     
+    it "should depend on UUID" do
+      defined?(UUID).should be_true
+    end
+    
   end
   
   
