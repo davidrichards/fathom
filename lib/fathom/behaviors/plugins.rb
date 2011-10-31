@@ -5,6 +5,7 @@ module Fathom
     end
 
     def plugin(mod)
+      return true if plugins.include?(mod)
       include mod unless mod.const_defined?(:InstanceMethods)
       extend mod::ClassMethods if mod.const_defined?(:ClassMethods)
       include mod::InstanceMethods if mod.const_defined?(:InstanceMethods)

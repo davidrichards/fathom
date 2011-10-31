@@ -64,6 +64,37 @@ module Fathom
       
     end
 
+    def parents(node)
+      output = []
+      self.adjacency_matrix.each do |(parent, child), value|
+        output << parent if child == node
+      end
+      output
+    end
+    
+    def children(node)
+      output = []
+      self.adjacency_matrix.each do |(parent, child), value|
+        output << child if parent == node
+      end
+      output
+    end
+    
+    def topological_sort!
+      sorted = []
+      unmarked = self.variables.inject({}) do |hash, variable|
+        hash[variable] = parents(variable)
+        hash
+      end
+      self.variables.each do |variable|
+        found, parents = unmarked.find {|v, a| a.all?{|e| unmarked[e].nil?}}
+        unmarked.delete(found)
+        sorted << found
+      end
+      self.variables = sorted.dup
+      sorted
+    end
+
     def euler_circuit?
       return false if !connected?
       self.each_vertex do |v|

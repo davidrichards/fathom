@@ -87,6 +87,34 @@ describe NetworkBuilder do
     
   end
   
+  context "when performing a topological sort" do
+    before do
+      @network.add_edge :b, :d
+      @network.add_edge :e, :g
+      @network.add_edge :c, :e
+      @network.add_edge :a, :b
+      @network.add_edge :a, :c
+      @network.add_edge :c, :f
+    end
+    
+    it "should be able to perform a topological sort" do
+      @network.topological_sort!.should eql([:a, :b, :d, :c, :e, :g, :f])
+    end
+    
+    it "should change the order of the variables to the order of the sort" do
+      @network.variables.should eql([:b, :d, :e, :g, :c, :a, :f])
+      @network.topological_sort!
+      @network.variables.should eql([:a, :b, :d, :c, :e, :g, :f])
+    end
+
+    # TODO: Think about this one...
+    # it "should return false unless the graph is connected" do
+    #   @network.add_edge :x, :y
+    #   @network.topological_sort!.should be_false
+    # end
+    
+  end
+  
   it "should have an edge lookup tool" do
     v1, v2 = Variable.infer(:v1), Variable.infer(:v2)
     @network.add_edge(v1, v2)

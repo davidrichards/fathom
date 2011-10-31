@@ -77,4 +77,14 @@ describe Plugins do
     @class.especially_configured.should be_true
   end
   
+  it "should only plugin the module once" do
+    @class = Class.new do
+      extend Plugins
+      plugin PlainDemoModule
+      plugin PlainDemoModule
+    end
+    obj = @class.new
+    obj.class.plugins.should eql([PlainDemoModule])
+  end
+  
 end
