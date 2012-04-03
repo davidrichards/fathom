@@ -7,6 +7,11 @@ Welcome to Fathom.  Fathom is a library for building decision support tools.  Fa
 * need to simplify a complex problem
 * have more data than a spreadsheet likes to use
 
+About the Delay
+===============
+
+So, I haven't committed for a while.  You might be wondering, is David committed to getting this done?  I am.  The thing I found was that I was solving two problems, and wanted only one.  I was building a knowedge base at the same time as building an analytics toolset.  So, I've been busy daily getting Gearbox working, which I'll use in Fathom for managing a lot of these data.  So, I still wake up with ideas for Fathom, after all these years, and I've written a lot of them privately in little scratch projects here.  When I have Gearbox ready to capture the full richness of what I want to do, I'll come back and deliver a better Fathom than I originally thought was possible.
+
 Stability Note
 ==============
 
@@ -87,3 +92,4 @@ NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
 LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
