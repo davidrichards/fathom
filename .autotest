@@ -1,12 +1,11 @@
-begin
-  require 'autotest/fsevent'
-  require 'autotest/growl'
-rescue
-  # Don't complain if this OS X-specific functionality isn't available.
-end
+require "autotest/fsevent"
+require "autotest/bundler"
+require "autotest/restart"
 
-Autotest.add_hook :initialize do |autotest|
-  %w{.git .svn .hg .DS_Store ._* vendor tmp log}.each do |exception|
-    autotest.add_exception(exception)
+require "minitest/rg"
+
+Autotest.add_hook :initialize do |at|
+  at.add_mapping(/test\/action_objects\/.*\.rb/) do |_, m|
+   at.files_matching %r%^test/(action_objects)/.*\.rb$%
   end
 end

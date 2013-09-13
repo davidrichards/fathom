@@ -15,7 +15,7 @@ Gemfile.lock
 # jeweler generated
 pkg
 
-# Have editor/IDE/OS specific files you need to ignore? Consider using a global gitignore: 
+# Have editor/IDE/OS specific files you need to ignore? Consider using a global gitignore:
 #
 # * Create a file at ~/.gitignore
 # * Include files you want ignored
@@ -54,3 +54,4 @@ pkg
 # ruby-debug
 ruby-debug19
 
+data
