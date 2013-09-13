@@ -1,125 +1,103 @@
-# =begin
-#   Get observations
-#   Sort them
-#   Combine them
-#   Group them
-#   Count them
-#   Correlation matrices
-#   Suggested graph structure
-#   Gather factor frequencies
-#   Build factors (continuous and discrete)
-# =end
-#
-# =begin
-#
-#   Build Graph
-#   ===========
-#
-#   Data:
-#
-#   * Observation Grids (CSV w/ header)
-#   * Graph (hash)
-#
-#   Primary Course:
-#
-#   * User submits a CSV or several of them
-#   * System extracts the headers and chooses a sort column
-#   * System sorts the observations
-#
-# =end
-#
-# require File.expand_path('../action_object', __FILE__)
-#
-# module Fathom
-#   class BuildGraph < ActionObject
-#
-#     def inspect
-#       @inspect ||= "BuildGraph (#{data.size}) #{header.inspect}"
-#     end
-#
-#     attr_reader :csv
-#
-#     def initialize(csv)
-#       @csv = csv
-#     end
-#
-#     def header
-#       @header ||= csv[0]
-#     end
-#
-#     def data
-#       @data ||= csv[1..-1]
-#     end
-#
-#     attr_writer :sort_fields
-#     def sort_fields
-#       @sort_fields ||= [0]
-#     end
-#
-#     def transposed
-#       @transposed ||= data.transpose
-#     end
-#
-#     def correlations
-#       @correlations ||= transposed.combination(2).map do |x, y|
-#         ruby_pearson x, y
-#       end
-#     end
-#
-#     def correlation_labels
-#       @correlation_labels ||= header.map {|e| [e] }.combination(2).to_a
-#     end
-#
-#     def correlations_with_labels
-#       output = {}
-#       correlation_labels.each_with_index do |label, index|
-#         output[label] = correlations[index]
-#       end
-#       output.sort {|a, b| a[1] <=> b[1]}
-#     end
-#
-#     def sort!
-#       @transposed = nil
-#       data.sort! { |a, b| sort_fields.map{|i| a[i]} <=> sort_fields.map{|i| b[i]} }
-#     end
-#
-#     def ruby_pearson(x,y)
-#       begin
-#         n = x.length
-#
-#         sum_x = x.inject(0) {|r,i| r + i}
-#         sum_y = y.inject(0) {|r,i| r + i}
-#
-#         sum_x_squared = x.inject(0) {|r,i| r + i**2}
-#         sum_y_squared = y.inject(0) {|r,i| r + i**2}
-#
-#         prods = []; x.each_with_index{|this_x,i| prods << this_x*y[i]}
-#         p_sum = prods.inject(0){|r,i| r + i}
-#
-#         # Calculate Pearson score
-#         num = p_sum-(sum_x*sum_y/n)
-#         den = ((sum_x_squared-(sum_x**2)/n)*(sum_y_squared-(sum_y**2)/n))**0.5
-#         if den == 0
-#           return 0
-#         end
-#         r = num/den
-#         return r
-#       rescue
-#         0
-#       end
-#     end
-#
-#   end
-# end
-#
-# # require 'csv'
-# # def csv
-# #   @csv ||= CSV.read("data/football.csv", converters: :all)
-# # end
-# #
-# # include Fathom
-# # F = BuildGraph
-# #
-# # def bg
-# #   @bg ||= F.new(csv)
-# # end
+=begin
+
+  Build Graph
+  ===========
+
+  Data:
+
+  * observations (CSV)
+  * variable definitions
+  * priors (hash with prior values in the same order as the variable definitions)
+  * graph
+
+  Variable Definitions
+  [{
+    dependent_label: label
+    dependent_values: [values]
+    independents: {
+      label => [values]
+      ...
+    }
+  }...]
+
+  Graph Hash
+
+  {
+    priors: {...}
+    factors: [...]
+  }
+
+  Primary Course:
+
+  User provides variable definitions and observations
+  System updates the frequencies from observations
+  System replaces zeroes with the default probability (1 / 3 orders of magnitude greater than the observation size)
+  System normalizes the frequency table into a probability table
+  System returns a factor
+
+=end
+
+require File.expand_path('../action_object', __FILE__)
+
+module Fathom
+  class BuildGraph < ActionObject
+
+    attr_reader :variable_definitions, :observations
+
+    def initialize(variable_definitions, observations, opts={})
+      @variable_definitions = variable_definitions
+      @observations = observations
+      @priors = opts[:priors]
+    end
+
+    def factors
+      @factors ||= variable_definitions.map {|d| BuildDiscreteFactor.execute!(d, observations)}
+    end
+
+    def variables
+      return @variables if @variables
+      @variables = {}
+      variable_definitions.each do |definition|
+        @variables[definition[:dependent_label]] = definition[:dependent_values]
+        definition[:independents].each do |label, values|
+          @variables[label] = values
+        end
+      end
+      @variables
+    end
+
+    def dependent_variables
+      @dependent_variables ||= variable_definitions.inject({}) do |hash, definition|
+        hash[definition[:dependent_label]] = definition[:dependent_values]
+        hash
+      end
+    end
+
+    def parents
+      @parents ||= variables.select do |label, values|
+        not dependent_variables.include?(label)
+      end
+    end
+
+    def priors
+      @priors ||= {}
+      parents.each do |label, values|
+        @priors[label] ||= Array.new(values.size, 1.0 / values.size)
+      end
+      @priors
+    end
+
+    def graph
+      @graph ||= {
+        priors: priors,
+        factors: factors
+      }
+    end
+    alias_method :execute!, :graph
+
+    def inspect
+      @inspect ||= "BuildGraph (#{data.size}) #{header.inspect}"
+    end
+
+  end
+end
