@@ -60,8 +60,11 @@ describe BuildGraph do
 
   it "builds a graph from factors and priors" do
     assert_equal subject.priors, subject.graph[:priors]
+    assert_equal subject.priors, subject.graph.priors
     assert_equal({'b' => [0.5, 0.5]}, subject.graph[:priors])
+    assert_equal({'b' => [0.5, 0.5]}, subject.graph.priors)
     assert_equal subject.factors, subject.graph[:factors]
+    assert_equal subject.factors, subject.graph.factors
   end
 
   it "provides the graph on execute!" do

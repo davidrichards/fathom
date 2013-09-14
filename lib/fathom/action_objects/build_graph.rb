@@ -70,10 +70,10 @@ module Fathom
     end
 
     def graph
-      @graph ||= {
+      @graph ||= Graph.new({
         priors: priors,
         factors: factors
-      }
+      })
     end
     alias_method :execute!, :graph
 
