@@ -19,17 +19,6 @@
     }
   }
 
-  Factor Hash
-
-  {
-    name: Factor Name
-    attributes: [ Attribute Labels ]
-    table: {
-      [ Attribute Values ] => Probability
-      ...
-    }
-  }
-
   Primary Course
 
   User provides variable definitions and observations
@@ -66,12 +55,12 @@ module Fathom
     end
 
     def factor
-      @factor ||= {
+      @factor ||= Factor.new({
        name: dependent_label,
-       attributes: independent_labels,
+       properties: independent_labels,
        type: 'discrete',
        table: probability_table
-      }
+      })
     end
     alias_method :execute!, :factor
 

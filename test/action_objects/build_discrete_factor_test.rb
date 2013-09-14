@@ -42,8 +42,11 @@ describe BuildDiscreteFactor do
   it "returns a factor" do
     factor = subject.factor
     assert_equal 'a', factor[:name]
-    assert_equal ['b'], factor[:attributes]
+    assert_equal 'a', factor.name
+    assert_equal ['b'], factor[:properties]
+    assert_equal ['b'], factor.properties
     assert_equal subject.probability_table, factor[:table]
+    assert_equal subject.probability_table, factor.table
   end
 
   it "uses execute! to produce the factor" do
