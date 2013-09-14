@@ -19,10 +19,10 @@
 
 =end
 
-require File.expand_path('../action_object', __FILE__)
+require File.expand_path('../build_factor_base', __FILE__)
 module Fathom
 
-  class BuildDiscreteFactor < ActionObject
+  class BuildDiscreteFactor < BuildFactorBase
 
     attr_reader :variables, :observations
 
@@ -89,28 +89,8 @@ module Fathom
       1.0 / numerator
     end
 
-    def independent_labels
-      @independent_labels ||= variables.independents.keys
-    end
-
-    def independent_values
-      @independent_values ||= variables.independents.values
-    end
-
     def indices
       @indices ||= (independent_labels + [dependent_label]).map { |label| header.index(label) }
-    end
-
-    def dependent_label
-      @dependent_label ||= variables.dependent_label
-    end
-
-    def dependent_values
-      @dependent_values ||= variables.dependent_values
-    end
-
-    def table_keys
-      independent_values.inject(dependent_values) {|a, i| a.product(i)}.map(&:flatten)
     end
 
     def header
