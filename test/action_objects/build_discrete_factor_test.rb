@@ -4,24 +4,18 @@ require 'build_discrete_factor'
 include Fathom
 describe BuildDiscreteFactor do
 
-  let(:variable_definitions) do
-    {
-      dependent_label: 'a',
-      dependent_values: [1, 0],
-      independents: {
-        'b' => [1,0]
-      }
-    }
+  let(:variables) do
+    Variable.new(dependent_label: 'a', dependent_values: [1,0], independents: {'b' => [1,0]})
   end
   let(:observations) { get_observations }
-  subject { Fathom::BuildDiscreteFactor.new(variable_definitions, observations) }
+  subject { Fathom::BuildDiscreteFactor.new(variables, observations) }
 
   it "knows how to execute! at a class level" do
     assert BuildDiscreteFactor.respond_to?(:execute!)
   end
 
-  it "takes variable_definitions and observations" do
-    assert_equal variable_definitions, subject.variable_definitions
+  it "takes variables and observations" do
+    assert_equal variables, subject.variables
     assert_equal observations, subject.observations
   end
 

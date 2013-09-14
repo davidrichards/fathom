@@ -10,16 +10,6 @@
   * priors (hash with prior values in the same order as the variable definitions)
   * graph
 
-  Variable Definitions
-  [{
-    dependent_label: label
-    dependent_values: [values]
-    independents: {
-      label => [values]
-      ...
-    }
-  }...]
-
   Graph Hash
 
   {
@@ -42,47 +32,39 @@ require File.expand_path('../action_object', __FILE__)
 module Fathom
   class BuildGraph < ActionObject
 
-    attr_reader :variable_definitions, :observations
+    attr_reader :dependent_variables, :observations
 
-    def initialize(variable_definitions, observations, opts={})
-      @variable_definitions = variable_definitions
+    def initialize(dependent_variables, observations, opts={})
+      @dependent_variables = dependent_variables
       @observations = observations
       @priors = opts[:priors]
     end
 
     def factors
-      @factors ||= variable_definitions.map {|d| BuildDiscreteFactor.execute!(d, observations)}
+      @factors ||= dependent_variables.map {|d| BuildDiscreteFactor.execute!(d, observations)}
     end
 
     def variables
-      return @variables if @variables
-      @variables = {}
-      variable_definitions.each do |definition|
-        @variables[definition[:dependent_label]] = definition[:dependent_values]
-        definition[:independents].each do |label, values|
-          @variables[label] = values
+      @variables ||= dependent_variables.inject({}) do |hash, variable|
+        hash[variable.dependent_label] = variable
+        variable.independents.each do |label, values|
+          hash[label] ||= Variable.new(dependent_label: label, dependent_values: values)
         end
-      end
-      @variables
-    end
-
-    def dependent_variables
-      @dependent_variables ||= variable_definitions.inject({}) do |hash, definition|
-        hash[definition[:dependent_label]] = definition[:dependent_values]
         hash
       end
     end
 
     def parents
-      @parents ||= variables.select do |label, values|
-        not dependent_variables.include?(label)
+      @parents ||= variables.select do |label, variable|
+        not dependent_variables.map(&:dependent_label).include? label
       end
     end
 
     def priors
       @priors ||= {}
-      parents.each do |label, values|
-        @priors[label] ||= Array.new(values.size, 1.0 / values.size)
+      parents.each do |label, parent|
+        size = parent.dependent_values.size
+        @priors[label] ||= Array.new(size, 1.0 / size)
       end
       @priors
     end

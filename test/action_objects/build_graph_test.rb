@@ -5,48 +5,52 @@ require 'build_discrete_factor'
 include Fathom
 describe BuildGraph do
 
-  let(:variable_definitions) do
-    [{
+  let(:dependent_variables) do
+    [Variable.new({
       dependent_label: 'a',
       dependent_values: [1, 0],
       independents: {
         'b' => [1,0]
       }
-    }]
+    })]
   end
   let(:observations) { get_observations }
-  subject { Fathom::BuildGraph.new(variable_definitions, observations) }
-
+  subject { Fathom::BuildGraph.new(dependent_variables, observations) }
 
   it "knows how to execute! at a class level" do
     assert BuildGraph.respond_to?(:execute!)
   end
 
-  it "takes variable_definitions and observations" do
-    assert_equal variable_definitions, subject.variable_definitions
+  it "takes dependent_variables and observations" do
+    assert_equal dependent_variables, subject.dependent_variables
     assert_equal observations, subject.observations
   end
 
   it "generates a factor from every variable definition" do
-    factor = BuildDiscreteFactor.execute!(variable_definitions[0], observations)
+    factor = BuildDiscreteFactor.execute!(dependent_variables[0], observations)
     assert_equal factor, subject.factors[0]
   end
 
-  it "extracts a variable list from the variable definitions" do
-    assert_equal [1,0], subject.variables['a']
-    assert_equal [1,0], subject.variables['b']
+  it "extracts a variable list from the dependent variables and their independents" do
+    assert_equal dependent_variables[0], subject.variables['a']
+    assert subject.variables['b']
   end
 
-  it "creates a list of dependent variables" do
-    assert_equal({'a' => [1,0]}, subject.dependent_variables)
+  it "uses the dependent variables as the definitive source in the variables list" do
+    dependent_variables << Variable.new(dependent_label: 'b', dependent_values: [1,0], independents: {c: [:panda, :bear]})
+    subject = BuildGraph.new(dependent_variables, observations)
+    variable_b = subject.variables['b']
+    refute variable_b.independents.empty?
   end
 
   it "creates a list of parent variables" do
-    assert_equal({'b' => [1,0]}, subject.parents)
+    variable_b = subject.parents['b']
+    assert variable_b
+    assert_equal [1,0], variable_b.dependent_values
   end
 
   it "takes an optional list of priors" do
-    subject = Fathom::BuildGraph.new(variable_definitions, observations, priors: {'b' => [0.25, 0.75]})
+    subject = Fathom::BuildGraph.new(dependent_variables, observations, priors: {'b' => [0.25, 0.75]})
     assert_equal [0.25, 0.75], subject.priors['b']
   end
 

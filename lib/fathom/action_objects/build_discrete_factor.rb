@@ -9,16 +9,6 @@
   * variable definitions ({label => [values]})
   * factor
 
-  Variable Definitions
-  {
-    dependent_label: label
-    dependent_values: [values]
-    independents: {
-      label => [values]
-      ...
-    }
-  }
-
   Primary Course
 
   User provides variable definitions and observations
@@ -34,11 +24,11 @@ module Fathom
 
   class BuildDiscreteFactor < ActionObject
 
-    attr_reader :variable_definitions, :observations
+    attr_reader :variables, :observations
 
-    def initialize(variable_definitions, observations)
-      @variable_definitions = variable_definitions
-      @observations         = observations
+    def initialize(variables, observations)
+      @variables    = variables
+      @observations = observations
     end
 
     def frequency_table
@@ -100,11 +90,11 @@ module Fathom
     end
 
     def independent_labels
-      @independent_labels ||= variable_definitions[:independents].keys
+      @independent_labels ||= variables.independents.keys
     end
 
     def independent_values
-      @independent_values ||= variable_definitions[:independents].values
+      @independent_values ||= variables.independents.values
     end
 
     def indices
@@ -112,11 +102,11 @@ module Fathom
     end
 
     def dependent_label
-      @dependent_label ||= variable_definitions[:dependent_label]
+      @dependent_label ||= variables.dependent_label
     end
 
     def dependent_values
-      @dependent_values ||= variable_definitions[:dependent_values]
+      @dependent_values ||= variables.dependent_values
     end
 
     def table_keys
