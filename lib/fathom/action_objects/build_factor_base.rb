@@ -14,24 +14,24 @@ module Fathom
 
     protected
 
-    def independent_labels
-      @independent_labels ||= variables.independents.keys
+    def parent_labels
+      @parent_labels ||= variables.parents.keys
     end
 
-    def independent_values
-      @independent_values ||= variables.independents.values
+    def parent_values
+      @parent_values ||= variables.parents.values
     end
 
-    def dependent_label
-      @dependent_label ||= variables.dependent_label
+    def label
+      @label ||= variables.label
     end
 
-    def dependent_values
-      @dependent_values ||= variables.dependent_values
+    def values
+      @values ||= variables.values
     end
 
     def table_keys
-      independent_values.inject(dependent_values) {|a, i| a.product(i)}.map(&:flatten)
+      parent_values.inject(values) {|a, i| a.product(i)}.map(&:flatten)
     end
 
   end

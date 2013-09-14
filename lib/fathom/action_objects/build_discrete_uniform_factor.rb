@@ -37,8 +37,8 @@ module Fathom
 
     def factor
       @factor ||= Factor.new({
-       name: dependent_label,
-       properties: independent_labels,
+       label: label,
+       properties: parent_labels,
        type: 'discrete',
        table: probability_table
       })
@@ -46,7 +46,7 @@ module Fathom
     alias_method :execute!, :factor
 
     def inspect
-      "BuildDiscreteUniformFactor #{dependent_label} from #{independent_labels}"
+      "BuildDiscreteUniformFactor #{label} from #{parent_labels}"
     end
 
   end

@@ -5,7 +5,7 @@ include Fathom
 describe BuildDiscreteUniformFactor do
 
   let(:variables) do
-    Variable.new(dependent_label: 'a', dependent_values: [1,0], independents: {'b' => [1,0]})
+    Variable.new(label: 'a', values: [1,0], parents: {'b' => [1,0]})
   end
   subject { Fathom::BuildDiscreteUniformFactor.new(variables) }
 
@@ -26,8 +26,8 @@ describe BuildDiscreteUniformFactor do
 
   it "returns a factor" do
     factor = subject.factor
-    assert_equal 'a', factor[:name]
-    assert_equal 'a', factor.name
+    assert_equal 'a', factor[:label]
+    assert_equal 'a', factor.label
     assert_equal ['b'], factor[:properties]
     assert_equal ['b'], factor.properties
     assert_equal subject.probability_table, factor[:table]

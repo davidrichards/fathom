@@ -1,6 +1,6 @@
 ---
 attributes:
-  name: student
+  label: student
   properties: {}
   type: discrete
   table: {}

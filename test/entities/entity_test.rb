@@ -7,7 +7,7 @@ describe Entity do
   subject { Entity.new }
 
   it "can hydrate" do
-    subject = Entity.hydrate(name: :name)
+    subject = Entity.hydrate(label: :label)
     assert subject
   end
 

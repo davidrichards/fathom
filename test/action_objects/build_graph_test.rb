@@ -7,9 +7,9 @@ describe BuildGraph do
 
   let(:dependent_variables) do
     [Variable.new({
-      dependent_label: 'a',
-      dependent_values: [1, 0],
-      independents: {
+      label: 'a',
+      values: [1, 0],
+      parents: {
         'b' => [1,0]
       }
     })]
@@ -21,8 +21,12 @@ describe BuildGraph do
     assert BuildGraph.respond_to?(:execute!)
   end
 
-  it "takes dependent_variables and observations" do
-    assert_equal dependent_variables, subject.dependent_variables
+  it "converts a list of dependent_variables into a hash with their labels as keys" do
+    hash = dependent_variables.inject({}) {|h, v| h[v.label] = v; h}
+    assert_equal hash, subject.dependent_variables
+  end
+
+  it "takes observations" do
     assert_equal observations, subject.observations
   end
 
@@ -31,22 +35,22 @@ describe BuildGraph do
     assert_equal factor, subject.factors[0]
   end
 
-  it "extracts a variable list from the dependent variables and their independents" do
+  it "extracts a variable list from the dependent variables and their parents" do
     assert_equal dependent_variables[0], subject.variables['a']
     assert subject.variables['b']
   end
 
   it "uses the dependent variables as the definitive source in the variables list" do
-    dependent_variables << Variable.new(dependent_label: 'b', dependent_values: [1,0], independents: {c: [:panda, :bear]})
+    dependent_variables << Variable.new(label: 'b', values: [1,0], parents: {c: [:panda, :bear]})
     subject = BuildGraph.new(dependent_variables, observations)
     variable_b = subject.variables['b']
-    refute variable_b.independents.empty?
+    refute variable_b.parents.empty?
   end
 
   it "creates a list of parent variables" do
     variable_b = subject.parents['b']
     assert variable_b
-    assert_equal [1,0], variable_b.dependent_values
+    assert_equal [1,0], variable_b.values
   end
 
   it "takes an optional list of priors" do

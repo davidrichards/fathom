@@ -6,9 +6,9 @@ describe Factor do
 
   subject { Factor.new }
 
-  it "takes a name as a string" do
-    subject = Factor.new(name: :name)
-    assert_equal 'name', subject.name
+  it "takes a label as a string" do
+    subject = Factor.new(label: :label)
+    assert_equal 'label', subject.label
   end
 
   it "defaults properties to {}" do

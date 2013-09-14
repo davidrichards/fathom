@@ -35,20 +35,20 @@ module Fathom
     attr_reader :dependent_variables, :observations
 
     def initialize(dependent_variables, observations, opts={})
-      @dependent_variables = dependent_variables
+      @dependent_variables = assert_dependent_variables(dependent_variables)
       @observations = observations
       @priors = opts[:priors]
     end
 
     def factors
-      @factors ||= dependent_variables.map {|d| BuildDiscreteFactor.execute!(d, observations)}
+      @factors ||= dependent_variables.map {|label, variable| BuildDiscreteFactor.execute!(variable, observations)}
     end
 
     def variables
-      @variables ||= dependent_variables.inject({}) do |hash, variable|
-        hash[variable.dependent_label] = variable
-        variable.independents.each do |label, values|
-          hash[label] ||= Variable.new(dependent_label: label, dependent_values: values)
+      @variables ||= dependent_variables.inject({}) do |hash, (label, variable)|
+        hash[label] = variable
+        variable.parents.each do |l, v|
+          hash[l] ||= Variable.new(label: l, values: v)
         end
         hash
       end
@@ -56,14 +56,14 @@ module Fathom
 
     def parents
       @parents ||= variables.select do |label, variable|
-        not dependent_variables.map(&:dependent_label).include? label
+        not dependent_variables.include? label
       end
     end
 
     def priors
       @priors ||= {}
       parents.each do |label, parent|
-        size = parent.dependent_values.size
+        size = parent.values.size
         @priors[label] ||= Array.new(size, 1.0 / size)
       end
       @priors
@@ -79,6 +79,20 @@ module Fathom
 
     def inspect
       @inspect ||= "BuildGraph (#{data.size}) #{header.inspect}"
+    end
+
+    protected
+
+    def assert_dependent_variables(dependent_variables)
+      case dependent_variables
+      when Hash
+        dependent_variables
+      when Array
+        dependent_variables.inject({}) do |hash, variable|
+          hash[variable.label] = variable
+          hash
+        end
+      end
     end
 
   end

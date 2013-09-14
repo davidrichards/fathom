@@ -21,9 +21,9 @@ Dir["#{File.dirname(__FILE__)}/../test/support/**/*.rb"].each {|f| require f}
 include Fathom
 def variable_definitions
   [{
-    dependent_label: 'a',
-    dependent_values: [1, 0],
-    independents: {
+    label: 'a',
+    values: [1, 0],
+    parents: {
       'b' => [1,0]
     }
   }]

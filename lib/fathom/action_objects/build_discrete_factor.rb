@@ -46,8 +46,8 @@ module Fathom
 
     def factor
       @factor ||= Factor.new({
-       name: dependent_label,
-       properties: independent_labels,
+       label: label,
+       properties: parent_labels,
        type: 'discrete',
        table: probability_table
       })
@@ -55,7 +55,7 @@ module Fathom
     alias_method :execute!, :factor
 
     def inspect
-      "BuildDiscreteFactor (#{size}) #{dependent_label} from #{independent_labels}"
+      "BuildDiscreteFactor (#{size}) #{label} from #{parent_labels}"
     end
 
     protected
@@ -90,7 +90,7 @@ module Fathom
     end
 
     def indices
-      @indices ||= (independent_labels + [dependent_label]).map { |label| header.index(label) }
+      @indices ||= (parent_labels + [label]).map { |label| header.index(label) }
     end
 
     def header
