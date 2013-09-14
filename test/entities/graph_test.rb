@@ -18,4 +18,9 @@ describe Graph do
     assert_equal :panda, subject.factors[0]
   end
 
+  it "defaults the observations as a hash" do
+    assert_equal({}, subject.observations)
+    subject = Graph.new(observations: {'a' => 1})
+    assert_equal 1, subject.observations['a']
+  end
 end
