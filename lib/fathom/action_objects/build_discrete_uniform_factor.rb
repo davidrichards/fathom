@@ -1,7 +1,7 @@
 =begin
 
   Build Discrete Uniform Factor
-  =====================
+  ============================
 
   Data
 
