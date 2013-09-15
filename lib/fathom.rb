@@ -13,27 +13,24 @@ $LOAD_PATH.unshift(File.expand_path('../fathom/action_objects', __FILE__))
 
 Dir["#{File.dirname(__FILE__)}/fathom/entities/**/*.rb"].each {|f| require f}
 Dir["#{File.dirname(__FILE__)}/fathom/action_objects/**/*.rb"].each {|f| require f}
+
+
+### SPIKE
+
 Dir["#{File.dirname(__FILE__)}/../test/support/**/*.rb"].each {|f| require f}
-
-
-###
-
 include Fathom
-def variable_definitions
-  [{
-    label: 'a',
-    values: [1, 0],
-    parents: {
-      'b' => [1,0]
-    }
-  }]
+
+def graph
+  filename = File.expand_path('../../test/support/student.yaml', __FILE__)
+  contents = File.read(filename)
+  hash = YAML.load(contents)
+  @graph ||= Graph.new(hash)
 end
 
-def bg
-  @bg ||= BuildGraph.new(variable_definitions, get_observations)
+def factor
+  @factor ||= graph.factors.select {|f| f.label == "grade"}.first
 end
 
-def yaml
-  require 'yaml'
-  YAML.dump bg.graph
+def condition(factor, query)
+
 end

@@ -16,5 +16,14 @@ module Fathom
     attribute :priors,       default: {}
     attribute :factors,      default: []
     attribute :observations, default: {}
+
+    def initialize(*args)
+      hash = args[0]
+      hash ||= {}
+      hash["factors"] = Array(hash["factors"]).map {|f| Factor.new(f) }
+      args = [hash] + args[1..-1]
+      super *args
+    end
+
   end
 end

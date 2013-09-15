@@ -1,0 +1,104 @@
+---
+priors:
+  difficulty:
+  - 0.4
+  - 0.6
+  intelligence:
+  - 0.3
+  - 0.7
+factors:
+- label: grade
+  properties:
+  - difficulty
+  - intelligence
+  type: discrete
+  table:
+    ? - a
+      - 1
+      - 1
+    : 0.5
+    ? - a
+      - 1
+      - 0
+    : 0.05
+    ? - a
+      - 0
+      - 1
+    : 0.9
+    ? - a
+      - 0
+      - 0
+    : 0.3
+    ? - b
+      - 1
+      - 1
+    : 0.3
+    ? - b
+      - 1
+      - 0
+    : 0.25
+    ? - b
+      - 0
+      - 1
+    : 0.08
+    ? - b
+      - 0
+      - 0
+    : 0.4
+    ? - c
+      - 1
+      - 1
+    : 0.2
+    ? - c
+      - 1
+      - 0
+    : 0.7
+    ? - c
+      - 0
+      - 1
+    : 0.02
+    ? - c
+      - 0
+      - 0
+    : 0.3
+- label: sat
+  properties:
+  - intelligence
+  type: discrete
+  table:
+    ? - 1
+      - 1
+    : 0.25
+    ? - 1
+      - 0
+    : 0.25
+    ? - 0
+      - 1
+    : 0.25
+    ? - 0
+      - 0
+    : 0.25
+- label: letter
+  properties:
+  - grade
+  type: discrete
+  table:
+    ? - 1
+      - a
+    : 2.083330729169921e-07
+    ? - 1
+      - b
+    : 2.083330729169921e-07
+    ? - 1
+      - c
+    : 2.083330729169921e-07
+    ? - 0
+      - a
+    : 2.083330729169921e-07
+    ? - 0
+      - b
+    : 2.083330729169921e-07
+    ? - 0
+      - c
+    : 2.083330729169921e-07
+observations: {}
