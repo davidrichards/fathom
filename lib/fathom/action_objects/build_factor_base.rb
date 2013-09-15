@@ -18,20 +18,20 @@ module Fathom
       @parent_labels ||= variables.parents.keys
     end
 
-    def parent_values
-      @parent_values ||= variables.parents.values
+    def parent_domains
+      @parent_domains ||= variables.parents.values
     end
 
     def label
       @label ||= variables.label
     end
 
-    def values
-      @values ||= variables.values
+    def domain
+      @domain ||= variables.domain
     end
 
     def table_keys
-      parent_values.inject(values) {|a, i| a.product(i)}.map(&:flatten)
+      parent_domains.inject(domain) {|a, i| a.product(i)}.map(&:flatten)
     end
 
   end

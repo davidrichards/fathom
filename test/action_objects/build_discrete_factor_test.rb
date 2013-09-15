@@ -5,7 +5,7 @@ include Fathom
 describe BuildDiscreteFactor do
 
   let(:variables) do
-    Variable.new(label: 'a', values: [1,0], parents: {'b' => [1,0]})
+    Variable.new(label: 'a', domain: [1,0], parents: {'b' => [1,0]})
   end
   let(:observations) { get_observations }
   subject { Fathom::BuildDiscreteFactor.new(variables, observations) }

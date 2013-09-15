@@ -48,7 +48,7 @@ module Fathom
       @variables ||= dependent_variables.inject({}) do |hash, (label, variable)|
         hash[label] = variable
         variable.parents.each do |l, v|
-          hash[l] ||= Variable.new(label: l, values: v)
+          hash[l] ||= Variable.new(label: l, domain: v)
         end
         hash
       end
@@ -63,7 +63,7 @@ module Fathom
     def priors
       @priors ||= {}
       parents.each do |label, parent|
-        size = parent.values.size
+        size = parent.domain.size
         @priors[label] ||= Array.new(size, 1.0 / size)
       end
       @priors

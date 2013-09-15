@@ -11,10 +11,10 @@ describe Variable do
     assert_equal 'name', subject.label
   end
 
-  it "defaults values as an Array" do
-    assert_equal [], subject.values
-    subject = Variable.new(values: [1,0])
-    assert_equal [1,0], subject.values
+  it "defaults domain as an Array" do
+    assert_equal [], subject.domain
+    subject = Variable.new(domain: [1,0])
+    assert_equal [1,0], subject.domain
   end
 
   it "defaults the parents to {}" do

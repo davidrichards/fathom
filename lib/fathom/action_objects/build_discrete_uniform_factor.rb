@@ -5,7 +5,7 @@
 
   Data
 
-  * variable definitions ({label => [values]})
+  * variable definitions ({label => [domain]})
   * factor
 
   Primary Course

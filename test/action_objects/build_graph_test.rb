@@ -8,7 +8,7 @@ describe BuildGraph do
   let(:dependent_variables) do
     [Variable.new({
       label: 'a',
-      values: [1, 0],
+      domain: [1, 0],
       parents: {
         'b' => [1,0]
       }
@@ -41,7 +41,7 @@ describe BuildGraph do
   end
 
   it "uses the dependent variables as the definitive source in the variables list" do
-    dependent_variables << Variable.new(label: 'b', values: [1,0], parents: {c: [:panda, :bear]})
+    dependent_variables << Variable.new(label: 'b', domain: [1,0], parents: {c: [:panda, :bear]})
     subject = BuildGraph.new(dependent_variables, observations)
     variable_b = subject.variables['b']
     refute variable_b.parents.empty?
@@ -50,7 +50,7 @@ describe BuildGraph do
   it "creates a list of parent variables" do
     variable_b = subject.parents['b']
     assert variable_b
-    assert_equal [1,0], variable_b.values
+    assert_equal [1,0], variable_b.domain
   end
 
   it "takes an optional list of priors" do
