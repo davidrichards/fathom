@@ -12,11 +12,12 @@ describe Graph do
     assert_equal [0.2, 0.8], subject.priors['a']
   end
 
-  it "defaults the factors to an array" do
-    assert_equal [], subject.factors
-    subject = Graph.new(factors: [:panda, :bear])
-    assert_equal :panda, subject.factors[0]
-  end
+  # Coming...but differently...
+  # it "defaults the factors to an array of factors" do
+  #   assert_equal [], subject.factors
+  #   subject = Graph.new(factors: [{label: :panda}])
+  #   assert_equal "panda", subject.factors[0].label
+  # end
 
   it "defaults the observations as a hash" do
     assert_equal({}, subject.observations)
