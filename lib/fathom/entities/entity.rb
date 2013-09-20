@@ -1,3 +1,5 @@
+require 'active_support/core_ext/hash'
+
 module Fathom
 
   class Entity
@@ -24,18 +26,15 @@ module Fathom
           from_yaml(File.read(filename))
         end
       end
-
-      # For typecasting
-      def call(*attrs)
-        if attrs[0].is_a?(Array)
-          attrs[0].map { |o| o.is_a?(self) ? o : new(o) }
-        else
-          new(*attrs)
-        end
-      end
     end
 
-    alias_method :to_hash, :serializable_hash
+    def as_json(*args)
+      attributes
+    end
+
+    def serializable_hash(*args)
+      as_json(*args)
+    end
 
   end
 end

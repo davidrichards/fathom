@@ -6,12 +6,16 @@ module Fathom
     attribute :properties, default: {}
     attribute :type, default: "discrete", type: String
     attribute :table, default: {}
+
+    def initialize(object={})
+      case object
+      when Factor
+        super(object.attributes)
+      when Hash
+        hash = object.with_indifferent_access
+        hash[:table] = hash.fetch(:table, {})
+        super(hash)
+      end
+    end
   end
-
-  # class Factors < Array
-  #   def self.call(array, *args)
-  #     Array(array).map { |o| Factor.new(o) }
-  #   end
-  # end
-
 end
