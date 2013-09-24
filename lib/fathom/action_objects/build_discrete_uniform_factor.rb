@@ -21,10 +21,25 @@ module Fathom
 
   class BuildDiscreteUniformFactor < BuildFactorBase
 
-    attr_reader :variables
+    attr_reader :target_variable, :parent_variables
 
-    def initialize(variables)
-      @variables    = variables
+    def initialize(target_variable, parent_variables=[])
+      @target_variable = target_variable
+      @parent_variables = Array(parent_variables)
+    end
+
+    def target_label
+      @target_label ||= target_variable.label
+    end
+    alias_method :label, :target_label
+    alias_method :target, :target_variable
+
+    def variables
+      @variables ||= [target_variable] + parent_variables
+    end
+
+    def parent_labels
+      @parent_labels ||= parent_variables.map(&:label)
     end
 
     def probability_table
@@ -38,7 +53,7 @@ module Fathom
     def factor
       @factor ||= Factor.new({
        label: label,
-       properties: parent_labels,
+       parents: parent_labels,
        type: 'discrete',
        table: probability_table
       })

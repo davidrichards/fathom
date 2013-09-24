@@ -5,8 +5,9 @@
 
   Data
 
+  * variables
+  * parent_labels
   * observations (CSV)
-  * variable definitions ({label => [domain]})
   * factor
 
   Primary Course
@@ -24,32 +25,32 @@ module Fathom
 
   class BuildDiscreteFactor < BuildFactorBase
 
-    attr_reader :variables, :observations
+    attr_reader :variables, :parent_labels, :observations
 
-    def initialize(variables, observations)
-      @variables    = variables
-      @observations = observations
+    def initialize(variables, parent_labels, observations)
+      @variables     = Array(variables)
+      @parent_labels = Array(parent_labels)
+      @observations  = observations
     end
 
     def frequency_table
-      return @frequency_table if @frequency_table
-      @frequency_table = Hash.new(0)
-      data.each do |row|
-        @frequency_table[key_for(row)] += 1
+      @frequency_table ||= data.inject(empty_table(0)) do |hash, row|
+        hash[key_for(row)] += 1
+        hash
       end
-      @frequency_table
     end
 
     def probability_table
-      @probability_table ||= normalize_frequencies
+      @probability_table ||= NormalizeTable.execute!(frequency_table, zero)
     end
 
     def factor
       @factor ||= Factor.new({
-       label: label,
-       properties: parent_labels,
-       type: 'discrete',
-       table: probability_table
+       label:     label,
+       target:    target,
+       parents:   parent_labels,
+       type:      'discrete',
+       table:     probability_table
       })
     end
     alias_method :execute!, :factor
@@ -61,36 +62,29 @@ module Fathom
     protected
 
     def key_for(row)
-      indices.map { |index| row[index] }
-    end
-
-    def normalize_frequencies
-      table_keys.each do |key|
-        frequency_table[key] = default_frequency if frequency_table[key].zero?
-      end
-      table_keys.inject({}) do |hash, key|
-        hash[key] = frequency_table[key] / frequency_sum
+      variable_labels.inject({}) do |hash, label|
+        index = header.index(label)
+        hash[label] = row[index]
         hash
       end
     end
 
-    def frequency_sum
-      @frequency_sum ||= frequency_table.inject(0.0) {|s, (k, v)| s + v}
+    def empty_table(default=nil)
+      table_keys.inject(Hash.new(default)) do |hash, key|
+        hash[key] = default
+        hash
+      end
     end
 
     def size
       @size ||= data.size
     end
 
-    def default_frequency
+    def zero
       ceiling_order_of_magnitude = Math.log10(size).ceil
       three_orders_more = 3 + ceiling_order_of_magnitude
       numerator = 10 ** three_orders_more
       1.0 / numerator
-    end
-
-    def indices
-      @indices ||= (parent_labels + [label]).map { |label| header.index(label) }
     end
 
     def header

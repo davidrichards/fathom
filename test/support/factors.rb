@@ -3,6 +3,7 @@ def simple_factor_json_filename
 end
 
 def simple_factor
+  Fathom::Factor.from_file(simple_factor_json_filename)
 end
 
 def simple_factor_yaml_filename
