@@ -4,7 +4,7 @@ include Fathom
 
 describe Entity do
 
-  subject { Entity.new }
+  subject { Entity.new(label: :label) }
 
   it "can hydrate" do
     subject = Entity.hydrate(label: :label)
@@ -34,4 +34,11 @@ describe Entity do
     subject = Entity.from_file(simple_factor_yml_filename)
     assert subject
   end
+
+  it "can dump json" do
+    json = subject.to_json
+    subject2 = Entity.from_json(json)
+    assert_equal subject2, subject
+  end
+
 end

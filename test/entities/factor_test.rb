@@ -11,10 +11,14 @@ describe Factor do
     assert_equal 'label', subject.label
   end
 
-  it "defaults properties to {}" do
-    assert_equal({}, subject.properties)
-    subject = Factor.new(properties: {test: :this})
-    assert_equal :this, subject.properties[:test]
+  it "takes a target" do
+    variable = Variable.new(label: :a)
+    subject = Factor.new(target: variable.attributes)
+    assert_equal variable, subject.target
+  end
+
+  it "defaults parents to an array" do
+    assert_equal [], subject.parents
   end
 
   it "defaults type to discrete" do
@@ -28,8 +32,8 @@ describe Factor do
 
   it "defaults the table to {}" do
     assert_equal({}, subject.table)
-    subject = Factor.new(table: {test: :this})
-    assert_equal :this, subject.table[:test]
+    subject = Factor.new(table: {{a: 1} => 1})
+    assert_equal 1, subject.table[{a: 1}]
   end
 
 end

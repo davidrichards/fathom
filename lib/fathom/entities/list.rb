@@ -8,20 +8,6 @@ module Fathom
 
       mattr_accessor :klass
 
-      def initialize(*args)
-        super([])
-      end
-
-      def <<(object)
-        raise ArgumentError, "Can only add #{klass}" unless object.is_a?(klass)
-        super
-      end
-
-      def []=(index, object)
-        raise ArgumentError, "Can only add #{klass}" unless object.is_a?(klass)
-        super
-      end
-
       class << self
 
         def hydrate(array)
@@ -44,6 +30,20 @@ module Fathom
             from_yaml(File.read(filename))
           end
         end
+      end
+
+      def initialize(array=[])
+        super([])
+      end
+
+      def <<(object)
+        raise ArgumentError, "Can only add #{klass}" unless object.is_a?(klass)
+        super
+      end
+
+      def []=(index, object)
+        raise ArgumentError, "Can only add #{klass}" unless object.is_a?(klass)
+        super
       end
 
       def hydrate(array)

@@ -6,8 +6,8 @@ module Fathom
     include ActiveAttr::Model
 
     class << self
-      def hydrate(input)
-        new(input)
+      def hydrate(input=nil)
+        input.is_a?(self) ? input : new(input)
       end
 
       def from_json(json)

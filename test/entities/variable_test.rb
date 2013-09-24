@@ -17,10 +17,10 @@ describe Variable do
     assert_equal [1,0], subject.domain
   end
 
-  it "defaults the parents to {}" do
-    assert_equal({}, subject.parents)
-    subject = Variable.new(parents: {test: :this})
-    assert_equal :this, subject.parents[:test]
+  it "defaults the parents to []" do
+    assert_equal([], subject.parents)
+    subject = Variable.new(parents: [:a, :b, :c])
+    assert_equal [:a, :b, :c], subject.parents
   end
 
 end

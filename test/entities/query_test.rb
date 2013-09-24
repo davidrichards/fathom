@@ -6,7 +6,7 @@ describe Query do
 
   subject { Query.new }
 
-  it "should have a target" do
+  it "should default the target to a hash" do
     assert_equal({}, subject.target)
     subject.target = {label: :value}
     assert_equal({label: :value}, subject.target)
