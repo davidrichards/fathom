@@ -33,6 +33,15 @@ describe ConditionTable do
     assert_equal 1.0, subject.zero
   end
 
+  it "can take a Factor instead of a table" do
+    variable = Variable.new(label: 'a', domain: [1,0])
+    factor = BuildDiscreteUniformFactor.execute!(variable)
+    subject = ConditionTable.new(factor, query)
+    table = subject.execute!
+    expected = {{"a"=>1}=>Rational(1,1), {"a"=>0}=>Rational(0,1)}
+    assert_equal expected, table
+  end
+
   it "infers the conditions" do
     assert_equal({"a"=>1}, subject.conditions)
   end

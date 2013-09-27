@@ -24,6 +24,16 @@ describe MarginalizeTable do
     assert_equal filter, subject.filter
   end
 
+  it "can take a Factor instead of a table" do
+    variable_a = Variable.new(label: 'a', domain: [1,0])
+    variable_b = Variable.new(label: 'b', domain: [1,0], parents: ['a'])
+    factor = BuildDiscreteUniformFactor.execute!(variable_a, variable_b)
+    subject = MarginalizeTable.new(factor, filter)
+    table = subject.execute!
+    expected = {{"a"=>1}=>Rational(1,2), {"a"=>0}=>Rational(1,2)}
+    assert_equal expected, table
+  end
+
   it "creates a set of new keys, based on filtering out filter" do
     expected = [{"a"=>1}, {"a"=>0}]
     assert_equal expected, subject.new_keys

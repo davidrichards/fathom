@@ -6,7 +6,7 @@ module Fathom
     attr_reader :table, :filter
 
     def initialize(table, filter)
-      @table = table
+      @table = infer_table(table)
       @filter = filter
     end
 
@@ -35,6 +35,15 @@ module Fathom
     end
 
     protected
+
+    def infer_table(object)
+      case object
+      when Factor
+        object.table
+      else
+        object
+      end
+    end
 
     def extract(query)
       table.inject(0.0) do |sum, (table_key, table_value)|

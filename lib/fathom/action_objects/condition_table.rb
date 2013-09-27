@@ -6,7 +6,7 @@ module Fathom
     attr_reader :table, :query, :zero, :conditions
 
     def initialize(table, query, zero=0.0)
-      @table = table
+      @table = infer_table(table)
       @query = query
       @conditions = infer_conditions(query)
       @zero = zero
@@ -28,6 +28,15 @@ module Fathom
     end
 
     protected
+
+    def infer_table(object)
+      case object
+      when Factor
+        object.table
+      else
+        object
+      end
+    end
 
     def matches?(table_key)
       conditions.all? { |condition_key, condition_value| Array(condition_value).include?(table_key[condition_key]) }
