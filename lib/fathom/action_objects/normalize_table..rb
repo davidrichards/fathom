@@ -13,7 +13,7 @@ module Fathom
 
     def normalize!
       table.inject({}) do |hash, (key, value)|
-        hash[key] = table[key] / pre_normalized_sum
+        hash[key] = Rational(table[key], pre_normalized_sum)
         hash
       end
     end

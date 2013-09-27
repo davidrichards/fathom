@@ -45,7 +45,7 @@ module Fathom
     def probability_table
       size = table_keys.size
       @probability_table ||= table_keys.inject({}) do |hash, key|
-        hash[key] = 1.0 / size
+        hash[key] = Rational(1, size)
         hash
       end
     end

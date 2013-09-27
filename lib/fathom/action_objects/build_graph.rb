@@ -67,7 +67,7 @@ module Fathom
     def infer_priors(priors)
       independent_variables.each do |variable|
         size = variable.domain.size
-        priors[variable.label] ||= Array.new(size, 1.0 / size)
+        priors[variable.label] ||= Array.new(size, Rational(1, size))
       end
       priors
     end
