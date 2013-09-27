@@ -30,7 +30,8 @@ module Fathom
     def initialize(variables, observations, opts={})
       @variables    = variables
       @observations = observations
-      @priors       = infer_priors(opts.fetch(:priors, {}))
+      @opts         = opts.with_indifferent_access
+      @priors       = infer_priors
     end
 
     def variable_labels
@@ -63,17 +64,8 @@ module Fathom
       end.uniq
     end
 
-    # FIXME: Make this a type of Factor that works interchangeably with other factors.
-    def infer_priors(priors)
-      independent_variables.each do |variable|
-        size = variable.domain.size
-        priors[variable.label] ||= Array.new(size, Rational(1, size))
-      end
-      priors
-    end
-
     def factors
-      @factors ||= dependent_variables.map do |variable|
+      @factors ||= priors + dependent_variables.map do |variable|
         parents = variables.select { |parent| variable.parents.include?(parent.label) }
         BuildDiscreteFactor.execute!([variable] + parents, parents.map(&:label), observations)
       end
@@ -91,6 +83,35 @@ module Fathom
     def inspect
       @inspect ||= "BuildGraph (#{data.size}) #{header.inspect}"
     end
+
+    protected
+
+    def infer_priors
+      independent_variables.map { |variable| build_prior_factor(variable) }
+    end
+
+    def build_prior_factor(variable)
+      Factor.new(label: variable.label, table: build_prior_table(variable))
+    end
+
+    def default_prior_table(variable)
+      @opts.fetch(:priors, {}).inject({}) do |hash, (label, array)|
+        array = Array(array)
+        array.each_with_index do |prior_value, i|
+          hash[{label => variable.domain[i]}] = prior_value
+        end
+        hash
+      end
+    end
+
+    def build_prior_table(variable)
+      size = variable.domain.size
+      keys = variable.domain.inject(default_prior_table(variable)) do |hash, value|
+        hash[{variable.label => value}] ||= Rational(1,size)
+        hash
+      end
+    end
+    public :build_prior_table
 
   end
 end

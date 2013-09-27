@@ -72,52 +72,62 @@ describe BuildGraph do
   end
 
   it "infers priors for any independent variables" do
-    assert_equal({'b' => [0.5, 0.5]}, subject.priors)
+    expected = [Factor.new(label: 'b', table: {{'b' => 'x'} => Rational(1,2), {'b' => 'y'} => Rational(1,2)})]
+    assert_equal expected, subject.priors
   end
 
   it "can take pre-calculated priors as an initialization option" do
-    subject = Fathom::BuildGraph.new(variables, observations, priors: {'b' => [0.1, 0.9]})
-    assert_equal({'b' => [0.1, 0.9]}, subject.priors)
+    subject = Fathom::BuildGraph.new(variables, observations, priors: {'b' => [Rational(1,10), Rational(9,10)]})
+    prior = subject.priors[0]
+    assert_equal 'b', prior.label
+    assert_equal Rational(1,10), prior.table["b" => "x"]
+    assert_equal Rational(9,10), prior.table["b" => "y"]
   end
 
-  it "can take pre-calculated priors as an initialization option" do
-    complex_subject = Fathom::BuildGraph.new(complex_variables, observations, priors: {'b' => [0.1, 0.9]})
-    assert_equal({'b' => [0.1, 0.9], 'c' => [0.5, 0.5]}, complex_subject.priors)
+  it "can take some of the priors as pre-calculated values" do
+    complex_subject = Fathom::BuildGraph.new(complex_variables, observations, priors: {'b' => [Rational(1,10), Rational(9,10)]})
+
+    prior_b = complex_subject.priors[0]
+    assert_equal 'b', prior_b.label
+    assert_equal Rational(1,10), prior_b.table["b" => "x"]
+    assert_equal Rational(9,10), prior_b.table["b" => "y"]
+
+    prior_c = complex_subject.priors[1]
+    assert_equal 'c', prior_c.label
+    assert_equal Rational(1,2), prior_c.table["c" => 1]
+    assert_equal Rational(1,2), prior_c.table["c" => 0]
   end
 
-  it "builds factors for the dependent variables, based on the observations" do
-    factor = subject.factors[0]
+  it "supplies the priors as the first factors" do
+    prior = subject.factors[0]
+    assert_equal 'b', prior.label
+    assert_equal Rational(1,2), prior.table["b" => "x"]
+    assert_equal Rational(1,2), prior.table["b" => "y"]
+  end
 
+  it "generates more-complex factors for the dependent variables" do
+    factor = subject.factors[1]
     assert_equal 'a', factor.label
-    assert_equal variable_a, factor.target
-    assert_equal ['b'], factor.parents
-    assert_equal 'discrete', factor.type
-    expected_table = {
-      {"a"=>1, "b"=>"x"}=>9.999600015999361e-06, {"a"=>1, "b"=>"y"}=>9.999600015999361e-06,
-      {"a"=>0, "b"=>"x"}=>9.999600015999361e-06, {"a"=>0, "b"=>"y"}=>9.999600015999361e-06,
-      {"a"=>1, "b"=>1}=>0.0999960001599936, {"a"=>0, "b"=>1}=>0.1999920003199872,
-      {"a"=>1, "b"=>0}=>0.2999880004799808, {"a"=>0, "b"=>0}=>0.3999840006399744
-    }
-    assert_equal(expected_table, factor.table)
+    assert_in_delta 0.0000099, factor.table["b" => "x", "a" => 1], 0.0000001
+    assert_in_delta 0.399984, factor.table["a"=>0, "b"=>0], 0.0000001
   end
+
 
   it "builds factors for the dependent variables, based on the observations from a complex graph" do
 
-    assert_equal 2, complex_subject.factors.size
+    assert_equal 4, complex_subject.factors.size
 
     factor = complex_subject.factors[0]
 
-    assert_equal 'a', factor.label
-    assert_equal variable_a, factor.target
-    assert_equal ['b'], factor.parents
+    assert_equal 'b', factor.label
+    assert_equal [], factor.parents
     assert_equal 'discrete', factor.type
     expected_table = {
-      {"a"=>1, "b"=>"x"}=>0.0625, {"a"=>1, "b"=>"y"}=>0.19375,
-      {"a"=>0, "b"=>"x"}=>0.3, {"a"=>0, "b"=>"y"}=>0.44375
+      {"b"=>"x"}=>Rational(1,2), {"b"=>"y"}=>Rational(1,2)
     }
     assert_equal(expected_table, factor.table)
 
-    factor = complex_subject.factors[1]
+    factor = complex_subject.factors[-1]
 
     assert_equal 'd', factor.label
     assert_equal variable_d, factor.target
